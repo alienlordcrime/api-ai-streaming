@@ -1,11 +1,11 @@
 from typing import Optional
-from fastapi import APIRouter, Header, Request, BackgroundTasks
+from fastapi import APIRouter, Request, BackgroundTasks, Header
 from fastapi.responses import JSONResponse
 
 import logging
 import gc
 
-from api.services.ocr.ocr_functions_service import process_pdf_pages_optimized
+from api.services.ocr.ocr_functions_service import process_pdf_pages_ultra_optimized
 
 ocr_functions_router = APIRouter(prefix="/apply-ocr", tags=["Surya", "OCR", "AI"])
 
@@ -40,7 +40,7 @@ async def read_pdf_optimized(
         logging.info(f"Tamaño del archivo: {file_size} bytes")
         
         # Procesar PDF de forma optimizada
-        (page_content, page_count) = await process_pdf_pages_optimized(pdf_binary_data)
+        (page_content, page_count) = await process_pdf_pages_ultra_optimized(pdf_binary_data)
         
         # Liberar referencia a datos binarios
         pdf_binary_data = None
@@ -52,9 +52,7 @@ async def read_pdf_optimized(
             "page_content": page_content,
             "metadata": {
                 "source": x_filename,
-                "page_count": page_count,
-                "extraction_method": "surya_ocr_optimized",
-                "processing_notes": "Optimizado para memoria y velocidad"
+                "page_count": page_count
             }
         })
         
