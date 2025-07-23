@@ -4,3 +4,4 @@
 /share
 *.cfg
 *.pyc
+/include
