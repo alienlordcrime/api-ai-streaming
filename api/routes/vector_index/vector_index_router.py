@@ -1,7 +1,7 @@
 import gc
 from typing import Optional
 from fastapi import APIRouter, BackgroundTasks, Depends, Header, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, StreamingResponse
 
 from api.routes.vector_index.schemas.user_message import UserMessage
 from api.services.vector_index.process_documents_service import ProcessDocumentsService
@@ -41,18 +41,26 @@ async def add_document_vector_warehouse(
     return
 
 
-@vector_index_router.post("/completions", response_model=dict)
+@vector_index_router.post("/completions")
 def get_completions(
-    user_message: UserMessage,
-    _ragLegalService: RagLegalService = Depends()
+    request: Request,
+    user_message: UserMessage
 ):
     
-    response= _ragLegalService.get_chat_completions(user_message.query)
+    _ragLegalService: RagLegalService  = request.app.state.rag_legal_service
     
-    return JSONResponse(
-        content={ 
-            "user_message" : user_message.query, 
-            "response": response
-        }, 
+    headers = {
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Content-Type": "text/event-stream",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "X-Accel-Buffering": "no"
+    }
+    
+    return StreamingResponse(
+        _ragLegalService.get_chat_completions(user_message.query),
+        media_type="text/event-stream",
+        headers=headers,
         status_code=200
     )

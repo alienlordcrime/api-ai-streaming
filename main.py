@@ -5,6 +5,7 @@ from concurrent.futures import ProcessPoolExecutor
 from contextlib import asynccontextmanager
 
 from api.standalone.surya_service import SuryaPredictor
+from api.services.vector_index.rag_legal_service import RagLegalService
 
 import logging
 import os
@@ -18,6 +19,12 @@ logging.info("Iniciando API AI LLM")
 
 @asynccontextmanager
 async def lifespan(app):
+    
+    rag_legal_service= RagLegalService()
+    
+    app.state.rag_legal_service = rag_legal_service
+    yield
+    
     # Inicialización al startup
     predictor = SuryaPredictor()
     await predictor.get_predictors()  # Pre-cargar modelos

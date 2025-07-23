@@ -1,3 +1,4 @@
+import asyncio
 from langchain_core.documents import Document
 from langchain_core.runnables import (
     RunnableLambda,
@@ -8,17 +9,20 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama import ChatOllama
 from langchain.retrievers import EnsembleRetriever
+from langchain_core.callbacks.manager import AsyncCallbackManager
 
-from api.repositories.ollama_embeddings_repository import OllamaEmbeddingsRepository
 from api.repositories.vectorstore_legal_repository import VectorstoreLegalRepository
+from api.services.models_llm.utils.streaming_callback_handler import StreamingCallbackHandler
 
-from typing import List
+from typing import AsyncGenerator, List
 import logging
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)s: %(message)s',
     level=logging.INFO
 )
+
+callback_handler = StreamingCallbackHandler()
 
 def _summarize(docs: List[Document]) -> str:
     """Genera la cadena con los extractos para el prompt."""
@@ -75,6 +79,8 @@ class RagLegalService:
             top_k=20,
             repeat_penalty=1.1,
             num_predict=200,
+            streaming=True,
+            callback_manager=AsyncCallbackManager([callback_handler])
         )
 
     @staticmethod
@@ -109,5 +115,25 @@ class RagLegalService:
 
     # ---------- Llamado al API ----------
 
-    def get_chat_completions(self, user_query: str) -> str:
-        return self._rag_chain.invoke(user_query)
+    async def get_chat_completions(self, user_query: str) -> AsyncGenerator[str, None]:
+        
+        try:
+            
+            loop = asyncio.get_event_loop()
+            
+            def run_chain():
+                return self._rag_chain.invoke(user_query)
+            
+            # Ejecutar en thread pool para no bloquear el event loop
+            task = loop.run_in_executor(None, run_chain)
+                        
+            async for token in callback_handler.aiter():
+                yield token
+                
+            # Esperar a que termine la ejecución
+            await task
+            
+        except Exception as e:
+            error_msg = f"data: Error durante el análisis: {str(e)}\n\n"
+            yield error_msg
+            yield f"data: [DONE]\n\n"

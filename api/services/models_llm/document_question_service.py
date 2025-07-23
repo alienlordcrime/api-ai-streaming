@@ -47,14 +47,14 @@ class DocumentQuestionService:
         return bm25_retriever
     
     
-    def get_session_history(self, session_id: str) -> InMemoryChatMessageHistory:
+    def _get_session_history(self, session_id: str) -> InMemoryChatMessageHistory:
         if session_id not in self.store:
             self.store[session_id] = InMemoryChatMessageHistory()
         return self.store[session_id]
     
     
-    def preload_history(self, session_id: str, raw_history: list[dict[str, str]]) -> None:
-        chat_history = self.get_session_history(session_id)
+    def _preload_history(self, session_id: str, raw_history: list[dict[str, str]]) -> None:
+        chat_history = self._get_session_history(session_id)
         
         if chat_history.messages:
             return
@@ -79,7 +79,7 @@ class DocumentQuestionService:
             
             self.store = {}
             
-            self.preload_history('default', request.history)
+            self._preload_history('default', request.history)
             
             callback_handler = StreamingCallbackHandler()
             
@@ -131,7 +131,7 @@ class DocumentQuestionService:
             # Envolver con gestión automática de historial
             chain_with_memory = RunnableWithMessageHistory(
                 retrieval_chain,
-                self.get_session_history,
+                self._get_session_history,
                 input_messages_key="input",
                 history_messages_key="history",
                 output_messages_key="answer"
