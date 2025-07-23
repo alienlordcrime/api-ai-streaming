@@ -57,8 +57,10 @@ logging.info("Registrando rutas")
 
 from api.routes.ocr.ocr_functions_router import ocr_functions_router
 from api.routes.models_llm.ask_documents_repository import ask_documents_router
+from api.routes.vector_index.vector_index_router import vector_index_router
 app.include_router(ocr_functions_router)
 app.include_router(ask_documents_router)
+app.include_router(vector_index_router)
         
 logging.info("Configurando rutas")
         

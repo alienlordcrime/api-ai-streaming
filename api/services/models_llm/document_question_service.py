@@ -22,6 +22,7 @@ class DocumentQuestionService:
     
     def __init__(self):
         self.model_name = 'gemma3n:e4b'
+        self.server_llm = "http://10.6.14.54:11434"
         self.store: dict[str, InMemoryChatMessageHistory] = {}
         pass
     
@@ -83,7 +84,7 @@ class DocumentQuestionService:
             callback_handler = StreamingCallbackHandler()
             
             llm = ChatOllama(
-                base_url="http://10.6.14.54:11434",
+                base_url=self.server_llm,
                 model=self.model_name,
                 temperature=request.temperature,
                 streaming=True,
