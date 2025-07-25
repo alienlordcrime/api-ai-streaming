@@ -23,7 +23,6 @@ async def lifespan(app):
     rag_legal_service= RagLegalService()
     
     app.state.rag_legal_service = rag_legal_service
-    yield
     
     # Inicialización al startup
     predictor = SuryaPredictor()

@@ -5,3 +5,43 @@
 *.cfg
 *.pyc
 /include
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de entorno virtual
+.venv/
+.env
+
+# Archivos de desarrollo
+.git/
+.gitignore
+README.md
+*.md
+.pytest_cache/
+.coverage
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Logs
+*.log
+logs/
