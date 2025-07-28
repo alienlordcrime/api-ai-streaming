@@ -45,7 +45,7 @@ class VectorstoreLegalRepository():
         print("Aqui traigo el function", embedding_function)
         print("Vamos a retornar algo \n\n")
         
-        self.chroma_client.delete_collection(name)
+        # self.chroma_client.delete_collection(name)
         
         return self.chroma_client.get_or_create_collection(
             name, 
