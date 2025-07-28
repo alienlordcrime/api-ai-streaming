@@ -39,8 +39,8 @@ class RagLegalService:
         
         logging.info("Creando el vector store")
         
-        llm_url: str = "http://10.6.14.54:11434" 
-        model_name: str = "gemma3n:e4b"
+        llm_url: str = "http://10.0.0.14:11434"
+        model_name: str = "command-a:111b-03-2025-q4_K_M"
         
         self._vectorstore = (VectorstoreLegalRepository().get_vectorstore("legal_contracts"))
         
