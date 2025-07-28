@@ -11,7 +11,7 @@ class VectorstoreLegalRepository():
     
     def __init__(self):
         
-        server_onpremise= "host.docker.internal"
+        server_onpremise= "localhost"
         
         self.chroma_client = chromadb.HttpClient(
             host=server_onpremise,
