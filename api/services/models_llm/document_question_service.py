@@ -21,8 +21,8 @@ from api.services.models_llm.utils.streaming_callback_handler import StreamingCa
 class DocumentQuestionService:
     
     def __init__(self):
-        self.model_name = 'gemma3n:e4b'
-        self.server_llm = "http://10.6.14.54:11434"
+        self.server_llm = "http://localhost:11434"
+        self.model_name = 'command-a:111b-03-2025-q4_K_M'
         self.store: dict[str, InMemoryChatMessageHistory] = {}
         pass
     
