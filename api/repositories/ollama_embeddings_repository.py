@@ -9,7 +9,7 @@ class OllamaEmbeddingsRepository:
     
     def __init__(self):
         
-        self.OLLAMA_SERVER= "http://10.6.14.54:11434"
+        self.OLLAMA_SERVER= "http://10.0.0.14:11434"
         self.EMBEDDING_MODEL= "bge-m3:latest"
         
         pass

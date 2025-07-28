@@ -12,8 +12,7 @@ class VectorstoreLegalRepository():
     def __init__(self):
         
         server_onpremise= "host.docker.internal"
-        localhost= "localhost"
-        cloud_server= "ec2-54-221-8-38.compute-1.amazonaws.com"
+        
         self.chroma_client = chromadb.HttpClient(
             host=server_onpremise,
             port=8000,
