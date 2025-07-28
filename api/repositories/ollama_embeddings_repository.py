@@ -23,12 +23,16 @@ class OllamaEmbeddingsRepository:
     
     def get_embedding_function(self):
         
+        print("\n\nVamos por la función de embedding...\n\n")
+        
         embeddings = OllamaEmbeddings(
             base_url=self.OLLAMA_SERVER, 
             model=self.EMBEDDING_MODEL,
             temperature=0.4
         )
         embedding_function = create_langchain_embedding(embeddings)
+        
+        print("\n\nsi la traemos\n\n")
         
         return embedding_function
     
