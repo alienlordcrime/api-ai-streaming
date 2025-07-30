@@ -20,7 +20,8 @@ class StreamingCallbackHandler(AsyncCallbackHandler):
     async def on_llm_new_token(self, token: str, **kwargs):
         """Captura cada nuevo token generado"""
         if token:
-            await self.queue.put(f"data: {token}\n\n")
+            processed_token = token.replace('\n', '<|NEWLINE|>')
+            await self.queue.put(f"data: {processed_token}\n\n")
     
     async def on_llm_end(self, response, **kwargs):
         """Se ejecuta al final del LLM"""
