@@ -11,7 +11,7 @@ class VectorstoreLegalRepository():
     
     def __init__(self):
         
-        server_onpremise= "localhost"
+        server_onpremise= "10.0.0.14"
         
         self.chroma_client = chromadb.HttpClient(
             host=server_onpremise,
@@ -37,7 +37,7 @@ class VectorstoreLegalRepository():
         
         return vectorstore
      
-    def get_collection_name(self, name: str):
+    def get_collection_name_embed_function(self, name: str):
         
         _OllamaEmbeddingsRepository = OllamaEmbeddingsRepository()
         embedding_function= _OllamaEmbeddingsRepository.get_embedding_function()

@@ -14,8 +14,7 @@ class ProcessDocumentsService:
     async def add_document_vector_datawarehouse(self, pdf_binary_data: bytes, filename: str):
         
         _vectorstoreLegalRepository= VectorstoreLegalRepository()
-        collection= _vectorstoreLegalRepository.get_collection_name('legal_contracts')
-                
+        collection= _vectorstoreLegalRepository.get_collection_name_embed_function('legal_contracts')
         results= _vectorstoreLegalRepository.search_by_metadata(collection, {
             "filename": filename
         })
