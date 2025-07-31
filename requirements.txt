@@ -14,7 +14,6 @@ cfgv==3.4.0
 charset-normalizer==3.4.2
 chroma-hnswlib==0.7.6
 chromadb==0.6.3
-chromadb-client==1.0.15
 click==8.2.1
 colorama==0.4.6
 coloredlogs==15.0.1
