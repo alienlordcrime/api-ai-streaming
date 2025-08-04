@@ -57,11 +57,11 @@ class RagLegalService:
     def _build_ensemble_retriever(self) -> EnsembleRetriever:
         diverse = self._vectorstore.as_retriever(
             search_type="mmr",
-            search_kwargs={"k": 8, "lambda_mult": 0.40},
+            search_kwargs={"k": 20, "lambda_mult": 0.40},
         )
         relevant = self._vectorstore.as_retriever(
             search_type="mmr",
-            search_kwargs={"k": 8, "lambda_mult": 0.70},
+            search_kwargs={"k": 20, "lambda_mult": 0.70},
         )
         return EnsembleRetriever(
             retrievers=[diverse, relevant],

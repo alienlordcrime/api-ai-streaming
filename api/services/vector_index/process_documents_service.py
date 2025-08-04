@@ -10,7 +10,6 @@ class ProcessDocumentsService:
     def __init__(self):
         pass
     
-    
     async def add_document_vector_datawarehouse(self, pdf_binary_data: bytes, filename: str):
         
         _vectorstoreLegalRepository= VectorstoreLegalRepository()
