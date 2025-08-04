@@ -9,6 +9,12 @@ from api.services.vector_index.rag_legal_service import RagLegalService
 
 vector_index_router = APIRouter(prefix="/vector-index", tags=["Embedding", "AI"])
 
+
+"""
+curl -X POST "http://localhost:8015/vector-index/document-add" \
+  -H "X-Filename: prueba_nda.pdf" \
+  --data-binary "@/home/ubuntu/Documents/NDA_PRUEBA_IMAGE.pdf"
+"""
 @vector_index_router.post("/document-add")
 async def add_document_vector_warehouse(
     request: Request,
