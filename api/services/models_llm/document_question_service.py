@@ -27,6 +27,8 @@ class DocumentQuestionService:
         self.model_name = 'command-a:111b-03-2025-q4_K_M'
         self.store: dict[str, InMemoryChatMessageHistory] = {}
         
+        # curl -N -X POST http://ec2-18-232-61-87.compute-1.amazonaws.com:11434/api/chat   -H "Content-Type: application/json"   -d @input.json
+        # clear && curl -sN -X POST http://ec2-18-232-61-87.compute-1.amazonaws.com:11434/api/chat -H "Content-Type: application/json" -d @input.json | jq -r '.message.content'
         # === CONFIGURACIÓN PARA SERVIDOR REMOTO ===
         self.remote_config = {
             'temperature': 0.3,
