@@ -36,7 +36,9 @@ class DocumentQuestionService:
             'top_k': 40,
             'top_p': 0.9,
             'repeat_penalty': 1.1,
-            'num_ctx': 8192,
+            'num_ctx': 200000,
+            "num_batch": 64,
+            "num_predict": 4000
         }
         
         # === TIMEOUTS ===
@@ -294,8 +296,7 @@ ANALISIS DE OTRAS IA:
             
             # === FASE 1: PREPARACIÓN DE DOCUMENTOS ===
             documents = self._create_documents_from_text(request.files)
-            chunk_size = 15000
-            chunks = self._split_documents_optimized(documents, chunk_size, 1500)
+            chunks = self._split_documents_optimized(documents, 150000, 15000)
             
             total_chunks = len(chunks)
             yield f"🌐 Conectando al servidor remoto Ollama ({self.server_llm})...\n"
