@@ -32,7 +32,6 @@ class DocumentQuestionService:
         # === CONFIGURACIÓN PARA SERVIDOR REMOTO ===
         self.remote_config = {
             'temperature': 0.3,
-            'num_predict': -1,
             'top_k': 40,
             'top_p': 0.9,
             'repeat_penalty': 1.1,
@@ -375,29 +374,16 @@ CONTEXTO ANALIZADOS DE OTRAS IA:
                 history_messages_key="history",
             )
             
-            # === FASE 5: STREAMING FINAL CORREGIDO ===
-            async def run_chain():
-                """Ejecutar la cadena en background"""
-                return await asyncio.get_event_loop().run_in_executor(
-                    self.thread_pool,
-                    lambda: chain_with_memory.invoke(
-                        {
-                            "query": request.query,
-                            "final_answer": combined_analysis
-                        },
-                        config={"configurable": {"session_id": "default"}}
-                    )
-                )
-            
-            # CORRECCIÓN: Ejecutar cadena y streaming en paralelo
-            chain_task = asyncio.create_task(run_chain())
-            
-            # Stream tokens mientras la cadena se ejecuta
-            async for token in callback_handler.aiter():
-                yield token
-            
-            # Esperar a que termine la cadena
-            await chain_task
+            async for chunk in chain_with_memory.astream(
+                {
+                    "query": request.query,
+                    "final_answer": combined_analysis,
+                    "combined_content": "\n\n".join(all_results)
+                },
+                config={"configurable": {"session_id": "default"}}
+            ):
+                if hasattr(chunk, 'content') and chunk.content:
+                    yield chunk.content
             
         except Exception as e:
             error_msg = f"\n❌ Error en servidor remoto: {str(e)}\n"
